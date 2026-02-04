@@ -27,6 +27,59 @@ document.addEventListener("DOMContentLoaded", () => {
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
         `;
 
+        // Build participants section
+        const participantsSection = document.createElement("div");
+        participantsSection.className = "participants-section";
+
+        const participantsHeader = document.createElement("h5");
+        participantsHeader.textContent = "Participants";
+        participantsSection.appendChild(participantsHeader);
+
+        const participants = details.participants || [];
+
+        if (participants.length > 0) {
+          const list = document.createElement("ul");
+          list.className = "participants-list";
+
+          participants.forEach((p) => {
+            const li = document.createElement("li");
+
+            const avatar = document.createElement("span");
+            avatar.className = "avatar";
+            // derive initials from email or name-like string
+            const namePart = (p || "").split("@")[0];
+            const initials = namePart
+              .split(/[-._]/)
+              .map((s) => s[0] || "")
+              .slice(0, 2)
+              .join("")
+              .toUpperCase();
+            avatar.textContent = initials || "?";
+
+            const info = document.createElement("div");
+            info.className = "participant-info";
+
+            const participantName = document.createElement("span");
+            participantName.className = "participant-name";
+            participantName.textContent = p;
+
+            info.appendChild(participantName);
+
+            li.appendChild(avatar);
+            li.appendChild(info);
+            list.appendChild(li);
+          });
+
+          participantsSection.appendChild(list);
+        } else {
+          const empty = document.createElement("div");
+          empty.className = "participants-empty";
+          empty.textContent = "No participants yet. Be the first to sign up!";
+          participantsSection.appendChild(empty);
+        }
+
+        activityCard.appendChild(participantsSection);
+
         activitiesList.appendChild(activityCard);
 
         // Add option to select dropdown
